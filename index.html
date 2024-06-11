@@ -177,37 +177,25 @@
         document.getElementById('result').innerHTML = finalResult;
     }
 
-    function base64Decode(base64Str) {
-        return Uint8Array.from(atob(base64Str), c => c.charCodeAt(0));
-    }
-
     function xorStrings(s1, s2) {
-        const b1 = new TextEncoder().encode(s1);
-        const b2 = new TextEncoder().encode(s2);
-
-        const xorResult = new Uint8Array(b1.length);
-        for (let i = 0; i < b1.length; i++) {
-            xorResult[i] = b1[i] ^ b2[i];
+        let result = "";
+        for (let i = 0; i < Math.min(s1.length, s2.length); i++) {
+            let charCode1 = s1.charCodeAt(i);
+            let charCode2 = s2.charCodeAt(i);
+            result += String.fromCharCode(charCode1 ^ charCode2);
         }
-
-        return new TextDecoder().decode(xorResult);
+        return result;
     }
 
     function analyze(fid) {
         let encodedStr = fid;
-        let decodedBytes = base64Decode(encodedStr);
-        let decodedStr = new TextDecoder().decode(decodedBytes);
+        let decodedStr = atob(encodedStr);
+        decodedStr = atob(decodedStr);
 
-        encodedStr = decodedStr;
-        decodedBytes = base64Decode(encodedStr);
-        decodedStr = new TextDecoder().decode(decodedBytes);
-
-        let string1 = "OkE";
+        let string1 = "Okµ";
         let string2 = decodedStr;
-        string2 = string2.substr(0, 2) + "o" + (string2.length > 3 ? string2.charAt(3) : "");
-
-        const result = xorStrings(string1, string2);
-        return result.substr(0, string2.length);
+        let result = xorStrings(string1, string2);
+        return result;
     }
 </script>
 
