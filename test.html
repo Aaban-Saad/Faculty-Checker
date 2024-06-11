@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
+    <title>Faculty Cracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Roboto";
+        color: white;
+        text-align: center;
+    }
+
+    body {
+        background-color: rgb(27, 27, 27);
+    }
+
+    h1 {
+        font-size: 45px;
+        font-weight: 300;
+    }
+
+    h2 {
+        color: rgb(230, 230, 230);
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: rgb(206, 206, 206);
+    }
+
+    img {
+        margin-top: 20px;
+    }
+
+    @media screen and (max-width: 1050px) {
+        img {
+            width: 200px;
+        }
+    }
+
+    input {
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 10px;
+        color: black;
+    }
+
+    .common-btn {
+        padding: 10px 20px 10px 20px;
+        background-color: rgb(17, 170, 17);
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: large;
+    }
+
+    .common-btn:hover {
+        background-color: rgb(15, 148, 15);
+    }
+
+    .main-container {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .sub-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 30px 10px 30px 10px;
+        margin-top: 25px;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: rgb(0, 0, 0) 0px 10px 30px 1px;
+        background-color: rgb(44, 44, 44);
+    }
+
+    footer {
+        background: #333;
+        color: #fff;
+        padding: 50px 0;
+    }
+</style>
+
+<body>
+    <div class="main-container">
+        <h1>Faculty Cracker Beta</h1>
+        <div class="sub-container">
+            <h2>Step 1</h2>
+            <p>Log in to your RDS.</p>
+            <a href="https://rds3.northsouth.edu/" target="_blank"><button class="common-btn">Log in</button></a>
+        </div>
+
+        <div class="sub-container">
+            <h2>Step 2</h2>
+            <p>Go to this <a
+                    href="https://rds3.northsouth.edu/index.php/attendance/attendance/studentAttendanceLanding/MjI0MTI%3D"
+                    target="_blank">link,</a> then right click and inspect. Now go to Elements and right click on the
+                html
+                tag that says 'html lang="en"', then click on Copy > Copy element.
+            </p>
+            <img src="https://i.ibb.co/WcFdsYF/rds-guide.jpg" alt="Photo of RDS">
+        </div>
+
+        <div class="sub-container">
+            <h2>Step 3</h2>
+            <p>Paste the copied element below and click on Analyze.</p>
+            <input type="text" id="inputField" placeholder="Paste it here">
+            <button class="common-btn" onclick="analyzeInput()">Analyze</button>
+        </div>
+
+        <div class="sub-container">
+            <h2>Final Results</h2>
+            <div id="result"></div>
+        </div>
+
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Faculty Cracker. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+
+<script>
+    let predictions = [];
+    let courses = [];
+    let sections = [];
+
+    function analyzeInput() {
+        const input = document.getElementById('inputField').value;
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = input;
+        let data = tempDiv.getElementsByClassName('btn-danger');
+
+        for (let i = 0; i < data.length; i++) {
+            let splittedValues = (data[i].outerHTML).split('/');
+            let key = splittedValues[splittedValues.length - 5];
+            let course = splittedValues[splittedValues.length - 4];
+            let section = splittedValues[splittedValues.length - 3];
+            predictions.push(analyze(key));
+            courses.push(course);
+            sections.push(section);
+        }
+
+        let finalResult = `<div style="width: 15rem; display: flex; flex-direction: column"><br><br>`;
+        let evenRow = `<div style="background-color: #616161; width: 100%; border-radius: 10px; margin: 5px; padding: 10px; font-size: large; color: white">`;
+        let oddRow = `<div style="background-color: #706868; width: 100%; border-radius: 10px; margin: 5px; padding: 10px; font-size: large; color: white">`;
+        predictions.forEach((element, index) => {
+            if (index % 2 == 0) {
+                finalResult += evenRow + courses[index] + "." + sections[index] + " - " + element + "</div>";
+            } else {
+                finalResult += oddRow + courses[index] + "." + sections[index] + " - " + element + "</div>";
+            }
+        });
+        finalResult += "</div>";
+
+        document.getElementById('result').innerHTML = finalResult;
+    }
+
+    function base64Decode(base64Str) {
+        return Uint8Array.from(atob(base64Str), c => c.charCodeAt(0));
+    }
+
+    function xorStrings(s1, s2) {
+        const b1 = new TextEncoder().encode(s1);
+        const b2 = new TextEncoder().encode(s2);
+
+        const xorResult = new Uint8Array(b1.length);
+        for (let i = 0; i < b1.length; i++) {
+            xorResult[i] = b1[i] ^ b2[i];
+        }
+
+        return new TextDecoder().decode(xorResult);
+    }
+
+    function analyze(fid) {
+        let encodedStr = fid;
+        let decodedBytes = base64Decode(encodedStr);
+        let decodedStr = new TextDecoder().decode(decodedBytes);
+
+        encodedStr = decodedStr;
+        decodedBytes = base64Decode(encodedStr);
+        decodedStr = new TextDecoder().decode(decodedBytes);
+
+        let string1 = "OkE";
+        let string2 = decodedStr;
+        string2 = string2.substr(0, 2) + "o" + (string2.length > 3 ? string2.charAt(3) : "");
+
+        const result = xorStrings(string1, string2);
+        return result.substr(0, string2.length);
+    }
+</script>
+
+</html>
