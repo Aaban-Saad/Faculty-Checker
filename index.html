@@ -30,12 +30,16 @@
     h1 {
         font-size: 45px;
         font-weight: 300;
+        margin-bottom: 20px;
     }
 
     h2 {
         color: rgb(230, 230, 230);
         font-weight: 400;
         margin-bottom: 10px;
+    }
+    h3 {
+        margin-top: 10px;
     }
 
     p {
@@ -94,6 +98,14 @@
         background-color: rgb(44, 44, 44);
     }
 
+    .sub-container-2 {
+        height: 40vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
     footer {
         background: #333;
         color: #fff;
@@ -103,101 +115,34 @@
 
 <body>
     <div class="main-container">
-        <h1>Faculty Cracker Beta</h1>
+        <h1>Faculty Checker</h1>
+        <h2>Summer 2024 Release</h2>
+        <p>Check faculty initials with ease.</p>
         <div class="sub-container">
-            <h2>Step 1</h2>
-            <p>Log in to your RDS.</p>
-            <a href="https://rds3.northsouth.edu/" target="_blank"><button class="common-btn">Log In</button></a>
+            <h2>Download Now</h2>
+            <p>Currently available for windows only</p>
+            <a href="https://drive.google.com/uc?export=download&id=1vX7_ZaCowTezKe72N5VlOZSwI0lujkQb" target="_blank"><button class="common-btn">Windows 64</button></a>
         </div>
 
-        <div class="sub-container">
-            <h2>Step 2</h2>
-<!--             https://rds3.northsouth.edu/index.php/attendance/attendance/studentAttendanceLanding/NjI0Mjg%3D -->
-            <p>Go to this <a
-                    href="https://rds3.northsouth.edu/index.php/attendance/attendance/studentAttendanceLanding/MjI0MTI%3D"
-                    target="_blank">link</a>, then right click and inspect. Now go to Elements and right click on the
-                html
-                tag that says 'html lang="en"', then click on Copy > Copy element.
-            </p>
-            <img src="https://i.ibb.co/WcFdsYF/rds-guide.jpg" alt="Photo of RDS">
+        
+        <div class="sub-container-2">
+            <h2 style="margin-top: 30px;">Disclaimer</h2>
+            <h4>
+                Faculty Checker is a free and non-profit software. We do not collect, store, or transmit any user data, including passwords. Use at your own risk.
+            </h4>
         </div>
 
-        <div class="sub-container">
-            <h2>Step 3</h2>
-            <p>Paste the copied element below and click on Analyze.</p>
-            <input type="text" id="inputField" placeholder="Paste it here">
-            <button class="common-btn" onclick="analyzeInput()">Analyze</button>
-        </div>
-
-        <div class="sub-container">
-            <h2>Final Results</h2>
-            <div id="result"></div>
-        </div>
-
+        
     </div>
     <footer>
         <div class="container">
-            <p>&copy; 2024 Faculty Cracker. All rights reserved.</p>
+            <p>&copy; 2024 Faculty Checker. All rights reserved.</p>
         </div>
     </footer>
 </body>
 
-<script>
-    function analyzeInput() {
-        let predictions = [];
-        let courses = [];
-        let sections = [];
-
-        const input = document.getElementById('inputField').value;
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = input;
-        let data = tempDiv.getElementsByClassName('btn-danger');
-
-        for (let i = 0; i < data.length; i++) {
-            let splittedValues = (data[i].outerHTML).split('/');
-            let key = splittedValues[splittedValues.length - 5];
-            let course = splittedValues[splittedValues.length - 4];
-            let section = splittedValues[splittedValues.length - 3];
-            predictions.push(analyze(key));
-            courses.push(course);
-            sections.push(section);
-        }
-
-        let finalResult = `<div style="width: 15rem; display: flex; flex-direction: column; gap: 5px;"><br><br>`;
-        let evenRow = `<div style="background-color: #616161; width: 100%; border-radius: 10px; padding: 10px; font-size: large; color: white;">`;
-        let oddRow = `<div style="background-color: #706868; width: 100%; border-radius: 10px; padding: 10px; font-size: large; color: white;">`;
-        predictions.forEach((element, index) => {
-            if (index % 2 == 0) {
-                finalResult += evenRow + courses[index] + "." + sections[index] + " - " + element + "</div>";
-            } else {
-                finalResult += oddRow + courses[index] + "." + sections[index] + " - " + element + "</div>";
-            }
-        });
-        finalResult += "</div>";
-
-        document.getElementById('result').innerHTML = finalResult;
-    }
-
-    function xorStrings(s1, s2) {
-        let result = "";
-        for (let i = 0; i < Math.min(s1.length, s2.length); i++) {
-            let charCode1 = s1.charCodeAt(i);
-            let charCode2 = s2.charCodeAt(i);
-            result += String.fromCharCode(charCode1 ^ charCode2);
-        }
-        return result;
-    }
-
-    function analyze(fid) {
-        let encodedStr = fid;
-        let decodedStr = atob(encodedStr);
-        decodedStr = atob(decodedStr);
-
-        let string1 = "Okµ";
-        let string2 = decodedStr;
-        let result = xorStrings(string1, string2);
-        return result;
-    }
+<script>
+    
 </script>
 
 </html>
