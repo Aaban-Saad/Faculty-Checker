@@ -38,6 +38,7 @@
         font-weight: 400;
         margin-bottom: 10px;
     }
+
     h3 {
         margin-top: 10px;
     }
@@ -117,32 +118,99 @@
     <div class="main-container">
         <h1>Faculty Checker</h1>
         <h2>Summer 2024 Release</h2>
-        <p>Check faculty initials with ease.</p>
+        <p>Predict faculty initials with ease.</p>
         <div class="sub-container">
             <h2>Download Now</h2>
-            <p>Currently available for windows only</p>
-            <a href="https://drive.google.com/uc?export=download&id=1xFiUgVHaJIkIPOmIO2ojhZR249nKCIhL" target="_blank"><button class="common-btn">Windows 64</button></a>
+            <p>Currently available for Windows only</p>
+            <button class="common-btn" id="download-btn">Windows 64</button>
         </div>
 
-        
         <div class="sub-container-2">
             <h2 style="margin-top: 30px;">Disclaimer</h2>
             <h4>
-                Faculty Checker is a free and non-profit software. We do not collect, store, or transmit any user data, including passwords. Use at your own risk.
+                Faculty Checker is a free and non-profit software that does not collect, store, or transmit any user
+                data, including passwords. Use at your own risk.
             </h4>
         </div>
-
-        
     </div>
     <footer>
         <div class="container">
-            <p>&copy; 2024 Faculty Checker. All rights reserved.</p>
+            <img style="width: 50px;" src="logo.png" alt="">
+            <p style="margin-top: 20px; margin-bottom: 20px;">&copy; 2024 Faculty Checker. All rights reserved.</p>
         </div>
     </footer>
-</body>
 
-<script>
-    
-</script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCq7t59BteQAfawQ4_ZCqHJGbWDwbbMbUs",
+            authDomain: "faculty-checker.firebaseapp.com",
+            projectId: "faculty-checker",
+            storageBucket: "faculty-checker.appspot.com",
+            messagingSenderId: "667238061191",
+            appId: "1:667238061191:web:c32340eaea43d257f5d422",
+            databaseURL: "https://faculty-checker-default-rtdb.asia-southeast1.firebasedatabase.app",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getDatabase();
+
+        // Function to convert timestamp to Dhaka time
+        const convertToDhakaTime = (isoString) => {
+            const date = new Date(isoString);
+            return new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Dhaka',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).format(date);
+        };
+
+        // Handle the button click
+        document.getElementById('download-btn').addEventListener('click', async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                console.log('User signed in:', user);
+                const timestamp = new Date().toISOString();
+                const dhakaTime = convertToDhakaTime(timestamp)
+                
+                // Store user data in FireBase
+                await set(ref(db, 'users/' + user.uid), {
+                    name: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    userAgent: navigator.userAgent,
+                    platform: navigator.platform,
+                    language: navigator.language,
+                    timestamp: dhakaTime,
+                });
+
+                // Download the file
+                const link = document.createElement('a');
+                link.href = 'https://drive.google.com/uc?export=download&id=1Hm4-AGjQ07WjQYLOJlgHe8I6rPFTwP-y';
+                link.download = 'FacultyCheckerSetup.exe'; // Optional: specify the downloaded file name
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                // Handle errors here
+                console.error('Error during sign in or data storage:', error);
+            }
+        });
+    </script>
+</body>
 
 </html>
