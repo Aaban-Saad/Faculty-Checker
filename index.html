@@ -128,8 +128,7 @@
         <div class="sub-container-2">
             <h2 style="margin-top: 30px;">Disclaimer</h2>
             <h4>
-                Faculty Checker is a free and non-profit software that does not collect, store, or transmit any user
-                data, including passwords. Use at your own risk.
+                Faculty Checker is a free and non-profit software. Users need to authenticate using their Google account to download the software. We do not collect, store, or transmit any user data, including passwords, once the software is downloaded. Use at your own risk.
             </h4>
         </div>
     </div>
@@ -201,7 +200,6 @@
                 // Download the file
                 const link = document.createElement('a');
                 link.href = 'https://drive.google.com/uc?export=download&id=1Hm4-AGjQ07WjQYLOJlgHe8I6rPFTwP-y';
-                link.download = 'FacultyCheckerSetup.exe'; // Optional: specify the downloaded file name
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
