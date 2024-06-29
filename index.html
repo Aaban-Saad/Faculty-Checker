@@ -52,8 +52,12 @@
     }
 
     @media screen and (max-width: 1050px) {
-        img {
+        .logo-img {
             width: 200px;
+        }
+
+        .gif-img {
+            width: 300px;
         }
     }
 
@@ -100,13 +104,60 @@
     }
 
     .sub-container-2 {
-        height: 40vh;
+        height: 30vh;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
     }
 
+    .faq-container {
+        margin-top: 25px;
+        padding: 30px 10px 30px 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .faq {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .faq-question {
+        padding: 20px;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.314) 0px 10px 30px 1px;
+        background-color: rgba(44, 44, 44, 0.461);
+        font-size: medium;
+        transition: all .25s ease;
+    }
+
+    .faq-question:hover {
+        background-color: rgb(44, 44, 44);
+    }
+
+    .faq-answer {
+        max-height: 200px;
+        width: 100%;
+        margin: 10px;
+        display: block;
+        transition: all 0.25s;
+    }
+    
+    .hide {
+        /* display: none; */
+        max-height: 0px;
+        visibility: hidden;
+    }
+    
     footer {
         background: #333;
         color: #fff;
@@ -121,23 +172,72 @@
         <p>Predict faculty initials with ease.</p>
         <div class="sub-container">
             <h2>Download Now</h2>
-            <p>Currently available for Windows only</p>
+            <p>Currently available for Windows only.</p>
             <button class="common-btn" id="download-btn">Windows 64</button>
         </div>
 
+        <img class="gif-img" style="margin-top: 50px;" src="img/gif.gif" alt="gif">
+
+        <div class="faq-container">
+            <h2 style="margin-bottom: 20px;">Frequently Asked Questions</h2>
+            <div class="faq">
+                <button class="faq-question">Why am I not able to download the file?</button>
+                <div class="faq-answer hide">
+                    <p>
+                        The issue might be caused by an ad blocker. Make sure to disable it or any other similar extensions you have. If it still doesn't work, then try downloading from a different browser.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq">
+                <button class="faq-question">Why is the file so large in size?</button>
+                <div class="faq-answer hide">
+                    <p>
+                        The file is large because it includes TensorFlow, a powerful tool used for building and running machine learning models. TensorFlow has many built-in features and components that are necessary for the project to work properly, which makes the file size bigger.
+                    </p>
+                </div>
+            </div>
+
+            <div class="faq">
+                <button class="faq-question">Why is my course list not showing?</button>
+                <div class="faq-answer hide">
+                    <p>
+                        Make sure to fill in your ID and password correctly. Use the first 7 digits of your ID and recheck your password. If it still doesn't work, then wait for the next update.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div class="sub-container-2">
-            <h2 style="margin-top: 30px;">Disclaimer</h2>
+            <h2>Disclaimer</h2>
             <h4>
-                Faculty Checker is a free and non-profit software. Users need to authenticate using their Google account to download the software. We do not collect, store, or transmit any user data, including passwords, once the software is downloaded. Use at your own risk.
+                Faculty Checker is a free and non-profit software. Users need to authenticate using their Google account
+                to download the software. We do not collect, store, or transmit any user data, including passwords, once
+                the software is downloaded. Use at your own risk.
             </h4>
         </div>
     </div>
     <footer>
         <div class="container">
-            <img style="width: 50px;" src="logo.png" alt="">
+            <img class="logo-img" style="width: 50px;" src="img/logo.png" alt="logo">
             <p style="margin-top: 20px; margin-bottom: 20px;">&copy; 2024 Faculty Checker. All rights reserved.</p>
         </div>
     </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var faqs = document.querySelectorAll('.faq-question');
+
+            faqs.forEach(function (faq) {
+                faq.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    var answer = this.nextElementSibling;
+                    answer.classList.toggle('hide');
+                });
+            });
+        });
+    </script>
 
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -185,7 +285,7 @@
                 console.log('User signed in:', user);
                 const timestamp = new Date().toISOString();
                 const dhakaTime = convertToDhakaTime(timestamp)
-                
+
                 // Store user data in FireBase
                 await set(ref(db, 'users/' + user.uid), {
                     name: user.displayName,
